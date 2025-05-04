@@ -12,7 +12,7 @@ const config = {
 async function fetchData() {
     try {
         let pool = await sql.connect(config);
-        let result = await pool.request().query("SELECT * FROM sales");
+        let result = await pool.request().query("SELECT * FROM machine_types");
         return result.recordset;
     } catch (err) {
         console.error("Database error:", err);
