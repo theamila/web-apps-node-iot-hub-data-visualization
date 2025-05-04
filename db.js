@@ -12,7 +12,10 @@ const config = {
 async function fetchData() {
     try {
         let pool = await sql.connect(config);
-        let result = await pool.request().query("SELECT * FROM machine_types");
+        let result = await pool.request().query(`
+            SELECT TOP(100) rec_time, JSON_VALUE(jsondata, '$.process') AS process_value 
+            FROM machines ORDER BY rec_time ASC
+        `);
         return result.recordset;
     } catch (err) {
         console.error("Database error:", err);
