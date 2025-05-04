@@ -1,22 +1,22 @@
 const express = require("express");
 const { fetchData } = require("./db");
-const http = require("http");
-const socketIo = require("socket.io");
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+const PORT = process.env.PORT || 3000;
 
+// Serve static files (index.html, chart.js, etc.)
 app.use(express.static("public"));
 
-io.on("connection", async (socket) => {
-    console.log("Client connected");
-
-    setInterval(async () => {
+// API endpoint to fetch data
+app.get("/sales", async (req, res) => {
+    try {
         const data = await fetchData();
-        console.log("Emitting data:", data); // Logs data before sending
-        socket.emit("updateData", data);
-    }, 5000);
+        res.json(data); // Send data to frontend
+    } catch (error) {
+        console.error("API Error:", error);
+        res.status(500).send("Error fetching sales data");
+    }
 });
 
-server.listen(3000, () => console.log("Server running on port 3000"));
+// Start server
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
