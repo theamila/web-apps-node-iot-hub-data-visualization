@@ -9,25 +9,32 @@
     <canvas id="processChart"></canvas>
 
     <script>
-        async function loadChart() {
-            const response = await fetch("/sales"); // Direct API call
-            const data = await response.json();
+    async function loadChart() {
+        const response = await fetch("/sales");
+        const data = await response.json();
 
-            const ctx = document.getElementById("processChart").getContext("2d");
-            new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: data.map(d => new Date(d.rec_time).toLocaleString()),
-                    datasets: [{
+        const ctx = document.getElementById("processChart").getContext("2d");
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: data.map(d => new Date(d.rec_time).toLocaleString()),
+                datasets: [
+                    {
                         label: "Process Value",
                         data: data.map(d => d.process_value),
                         borderColor: "blue"
-                    }]
-                }
-            });
-        }
+                    },
+                    {
+                        label: "Hot Value",
+                        data: data.map(d => d.hot_value),
+                        borderColor: "red"
+                    }
+                ]
+            }
+        });
+    }
 
-        loadChart(); // Call function once to render graph
-    </script>
+    loadChart();
+</script>
 </body>
 </html>
