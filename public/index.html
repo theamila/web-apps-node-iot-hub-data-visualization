@@ -5,12 +5,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h2>Machine Process Data</h2>
-    <canvas id="processChart"></canvas>
+    <h2>Machine Data</h2>
+    <input type="date" id="datePicker">
+<button onclick="filterData()">Filter</button>
+<canvas id="processChart"></canvas>
 
-    <script>
-    async function loadChart() {
-        const response = await fetch("/sales");
+<script>
+    async function filterData() {
+        const selectedDate = document.getElementById("datePicker").value;
+        const response = await fetch(`/sales?date=${selectedDate}`);
         const data = await response.json();
 
         const ctx = document.getElementById("processChart").getContext("2d");
@@ -19,22 +22,12 @@
             data: {
                 labels: data.map(d => new Date(d.rec_time).toLocaleString()),
                 datasets: [
-                    {
-                        label: "Process Value",
-                        data: data.map(d => d.process_value),
-                        borderColor: "blue"
-                    },
-                    {
-                        label: "Hot Value",
-                        data: data.map(d => d.hot_value),
-                        borderColor: "red"
-                    }
+                    { label: "Process Value", data: data.map(d => d.process_value), borderColor: "blue" },
+                    { label: "Hot Value", data: data.map(d => d.hot_value), borderColor: "red" }
                 ]
             }
         });
     }
-
-    loadChart();
 </script>
 </body>
 </html>
