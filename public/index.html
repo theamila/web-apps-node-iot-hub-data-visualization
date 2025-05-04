@@ -11,13 +11,22 @@
 <canvas id="processChart"></canvas>
 
 <script>
+    let chartInstance = null; // Store chart globally
+
     async function filterData() {
         const selectedDate = document.getElementById("datePicker").value;
         const response = await fetch(`/sales?date=${selectedDate}`);
         const data = await response.json();
 
         const ctx = document.getElementById("processChart").getContext("2d");
-        new Chart(ctx, {
+
+        // Destroy old chart if it exists
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        // Create new chart instance
+        chartInstance = new Chart(ctx, {
             type: "line",
             data: {
                 labels: data.map(d => new Date(d.rec_time).toLocaleString()),
