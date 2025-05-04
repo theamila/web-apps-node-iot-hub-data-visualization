@@ -10,10 +10,13 @@ const io = socketIo(server);
 app.use(express.static("public"));
 
 io.on("connection", async (socket) => {
+    console.log("Client connected");
+
     setInterval(async () => {
         const data = await fetchData();
+        console.log("Emitting data:", data); // Logs data before sending
         socket.emit("updateData", data);
-    }, 5000); // Sends updated data every 5 seconds
+    }, 5000);
 });
 
 server.listen(3000, () => console.log("Server running on port 3000"));
