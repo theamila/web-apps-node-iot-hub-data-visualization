@@ -13,7 +13,8 @@ async function fetchData() {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request().query(`
-            SELECT TOP(100) rec_time, JSON_VALUE(jsondata, '$.process') AS process_value 
+            SELECT TOP(100) rec_time, JSON_VALUE(jsondata, '$.process') AS process_value,
+            JSON_VALUE(jsondata, '$.hot') AS hot_value
             FROM machines WHERE mac_name = 5201 ORDER BY rec_time ASC
         `);
         return result.recordset;
