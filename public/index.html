@@ -1,6 +1,33 @@
-<script>
-    const socket = io();
-    socket.on("updateData", (data) => {
-        console.log("Received data from server:", data); // Debug client-side
-    });
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Machine Process Data</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>Machine Process Data</h2>
+    <canvas id="processChart"></canvas>
+
+    <script>
+        async function loadChart() {
+            const response = await fetch("/sales"); // Direct API call
+            const data = await response.json();
+
+            const ctx = document.getElementById("processChart").getContext("2d");
+            new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: data.map(d => new Date(d.rec_time).toLocaleString()),
+                    datasets: [{
+                        label: "Process Value",
+                        data: data.map(d => d.process_value),
+                        borderColor: "blue"
+                    }]
+                }
+            });
+        }
+
+        loadChart(); // Call function once to render graph
+    </script>
+</body>
+</html>
