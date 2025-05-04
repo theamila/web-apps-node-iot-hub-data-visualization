@@ -9,14 +9,19 @@ const config = {
     options: { encrypt: true, trustServerCertificate: false }
 };
 
-async function fetchData() {
+async function fetchData(selectedDate) {
     try {
         let pool = await sql.connect(config);
-        let result = await pool.request().query(`
-            SELECT TOP(100) rec_time, JSON_VALUE(jsondata, '$.process') AS process_value,
-            JSON_VALUE(jsondata, '$.hot') AS hot_value
-            FROM machines WHERE mac_name = 5201 ORDER BY rec_time ASC
-        `);
+        let result = await pool.request()
+            .input("selectedDate", sql.Date, selectedDate)
+            .query(`
+                SELECT rec_time, 
+                       JSON_VALUE(jsondata, '$.process') AS process_value,
+                       JSON_VALUE(jsondata, '$.hot') AS hot_value
+                FROM machines 
+                WHERE CAST(rec_time AS DATE) = @selectedDate AND mac_name = 5201
+                ORDER BY rec_time ASC
+            `);
         return result.recordset;
     } catch (err) {
         console.error("Database error:", err);
