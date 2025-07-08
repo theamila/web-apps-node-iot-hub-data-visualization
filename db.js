@@ -16,7 +16,7 @@ async function fetchData(selectedDate, machineId) {
             .input("selectedDate", sql.Date, selectedDate)
             .input("machineId", sql.VarChar, machineId) 
             .query(`
-                SELECT rec_time, 
+                SELECT DATEADD(MINUTE, -330, rec_time) AS rec_time, 
                        JSON_VALUE(jsondata, '$.instan') AS process_value,
                        JSON_VALUE(jsondata, '$.reg1') AS hot_value
                 FROM machines 
