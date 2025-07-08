@@ -20,29 +20,29 @@
     let chartInstance = null; // Store chart globally
 
     async function filterData() {
-        const selectedDate = document.getElementById("datePicker").value;
-        const response = await fetch(`/sales?date=${selectedDate}`);
-        const data = await response.json();
+    const selectedDate = document.getElementById("datePicker").value;
+    const selectedMachine = document.getElementById("machineSelect").value;
 
-        const ctx = document.getElementById("processChart").getContext("2d");
+    const response = await fetch(`/sales?date=${selectedDate}&machine_id=${selectedMachine}`);
+    const data = await response.json();
 
-        // Destroy old chart if it exists
-        if (chartInstance) {
-            chartInstance.destroy();
-        }
+    const ctx = document.getElementById("processChart").getContext("2d");
 
-        // Create new chart instance
-        chartInstance = new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: data.map(d => new Date(d.rec_time).toLocaleString()),
-                datasets: [
-                    { label: "Instant Flow", data: data.map(d => d.process_value), borderColor: "blue" },
-                    { label: "Temperature", data: data.map(d => d.hot_value), borderColor: "red" }
-                ]
-            }
-        });
+    if (chartInstance) {
+        chartInstance.destroy();
     }
+
+    chartInstance = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: data.map(d => new Date(d.rec_time).toLocaleString()),
+            datasets: [
+                { label: "Instant Flow", data: data.map(d => d.process_value), borderColor: "blue", fill: false },
+                { label: "Temperature", data: data.map(d => d.hot_value), borderColor: "red", fill: false }
+            ]
+        }
+    });
+}
 </script>
 </body>
 </html>
