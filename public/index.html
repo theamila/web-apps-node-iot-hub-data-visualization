@@ -31,8 +31,8 @@
             data: {
                 labels: data.map(d => new Date(d.rec_time).toLocaleString()),
                 datasets: [
-                    { label: "Process Value", data: data.map(d => d.process_value), borderColor: "blue" },
-                    { label: "Hot Value", data: data.map(d => d.hot_value), borderColor: "red" }
+                    { label: "Instant Flow", data: data.map(d => d.process_value), borderColor: "blue" },
+                    { label: "Temperature", data: data.map(d => d.hot_value), borderColor: "red" }
                 ]
             }
         });
