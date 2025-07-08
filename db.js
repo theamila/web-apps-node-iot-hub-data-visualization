@@ -18,7 +18,7 @@ async function fetchData(selectedDate, machineId) {
             .query(`
                 SELECT rec_time, 
                        JSON_VALUE(jsondata, '$.instan') AS process_value,
-                       JSON_VALUE(jsondata, '$.tempr') AS hot_value
+                       JSON_VALUE(jsondata, '$.reg1') AS hot_value
                 FROM machines 
                 WHERE CAST(rec_time AS DATE) = @selectedDate
                 AND mac_name = @machineId
