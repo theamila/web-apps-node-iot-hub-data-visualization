@@ -9,17 +9,19 @@ const config = {
     options: { encrypt: true, trustServerCertificate: false }
 };
 
-async function fetchData(selectedDate) {
+async function fetchData(selectedDate, machineId) {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request()
             .input("selectedDate", sql.Date, selectedDate)
+            .input("machineId", sql.VarChar, machineId) 
             .query(`
                 SELECT rec_time, 
                        JSON_VALUE(jsondata, '$.instan') AS process_value,
-                       JSON_VALUE(jsondata, '$.tempr') AS hot_value
+                       JSON_VALUE(jsondata, '$.reg1') AS hot_value
                 FROM machines 
-                WHERE CAST(rec_time AS DATE) = @selectedDate AND mac_name = 1201
+                WHERE CAST(rec_time AS DATE) = @selectedDate
+                AND mac_name = @machineId
                 ORDER BY rec_time ASC
             `);
         return result.recordset;
