@@ -16,10 +16,10 @@ async function fetchData(selectedDate) {
             .input("selectedDate", sql.Date, selectedDate)
             .query(`
                 SELECT rec_time, 
-                       JSON_VALUE(jsondata, '$.process') AS process_value,
-                       JSON_VALUE(jsondata, '$.hot') AS hot_value
+                       JSON_VALUE(jsondata, '$.instan') AS process_value,
+                       JSON_VALUE(jsondata, '$.tempr') AS hot_value
                 FROM machines 
-                WHERE CAST(rec_time AS DATE) = @selectedDate AND mac_name = 5201
+                WHERE CAST(rec_time AS DATE) = @selectedDate AND mac_name = 1201
                 ORDER BY rec_time ASC
             `);
         return result.recordset;
