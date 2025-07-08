@@ -37,8 +37,8 @@
         data: {
             labels: data.map(d => new Date(d.rec_time).toLocaleString()),
             datasets: [
-                { label: "Instant Flow", data: data.map(d => d.process_value), borderColor: "blue", fill: false },
-                { label: "Temperature", data: data.map(d => d.hot_value), borderColor: "red", fill: false }
+                { label: "Steam - Instant", data: data.map(d => d.process_value), borderColor: "red", fill: false },
+                { label: "Water - Total", data: data.map(d => d.hot_value), borderColor: "blue", fill: false }
             ]
         }
     });
