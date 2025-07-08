@@ -10,10 +10,12 @@ app.use(express.static("public"));
 // API endpoint to fetch data
 app.get("/sales", async (req, res) => {
     try {
-        const selectedDate = req.query.date; // Get date from request
-        console.log("Filtering data for date:", selectedDate);
+        const selectedDate = req.query.date;
+        const machineId = req.query.machine_id;
 
-        const data = await fetchData(selectedDate);
+        console.log(`Filtering data for date: ${selectedDate}, machine: ${machineId}`);
+
+        const data = await fetchData(selectedDate, machineId); // Pass both parameters to your logic
         res.json(data);
     } catch (error) {
         console.error("API Error:", error);
